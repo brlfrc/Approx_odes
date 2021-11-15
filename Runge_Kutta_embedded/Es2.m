@@ -1,19 +1,21 @@
 clear all
 close all
 
-% y'=y^2, y in R^n e t in [0,T]
+% y'=cos^2(ay), y in R^n e t in [0,T]
+alpha=40;
+g=@(t,y) cos(alpha*y)*cos(alpha*y);
+
+y0=-0;
+c=-tan(alpha*y0)/alpha;
+f_esatta=@(t) atan(alpha*(t-c))/alpha;
 
 t0=0;
-y0=2;
-tf=1/y0-0.2;
+tf=0.4;
 h=10e-3;
 TOL=10e-5;
 
-g=@(t,y) y*y;
-f_esatta=@(t) y0./(1-t*y0);
-
 [yy_E,nevals_E,tt_E]= euler_esplicito (g, t0, tf, y0, h);
-[yy,nstep, nrech, nevals, H_r,STIMA,tt]= RKembedded (g,t0,tf,y0,@EulerHeun,TOL);
+[yy,nstep, nrech, nevals, H_r,STIMA,tt]= RKembedded (g,t0,tf,y0,@EulerHeun  ,TOL);
 
 %Soluzione esatta t,y
 figure()

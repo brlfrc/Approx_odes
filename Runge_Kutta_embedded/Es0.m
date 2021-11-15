@@ -3,7 +3,7 @@ close all
 
 a=1;
 
-lambda=-5;
+lambda=-10;
     
 t0=0;
 tf=5;
@@ -11,7 +11,7 @@ y0=1;
 
 for k=[4,5,6]
     TOL=10^(-k);
-    [yy,nstep, nrech, nevals, H_r,STIMA,tt]= RKembedded (@(t,y) lambda*y,t0,tf,y0,@Fehlberg_4and5,TOL);
+    [yy,nstep, nrech, nevals, H_r,STIMA,tt]= RKembedded (@(t,y) lambda*y,t0,tf,y0,@EulerHeun,TOL);
     n=size(STIMA, 2);
     
     figure(1)
@@ -20,7 +20,7 @@ for k=[4,5,6]
     hold on
 end
 
-% h vs t
+% h vs dt
 title(['lambda = ', num2str(lambda)])
 grid on
 xlabel("t"); ylabel("h");
