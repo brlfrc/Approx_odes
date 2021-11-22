@@ -9,7 +9,7 @@ g= 9.8;
 L= 1;
 m= 1;
 
-h = 10e-3;
+h = 10e-5;
 TOL =10e-5;
 
 t0=0;
@@ -20,7 +20,7 @@ f=@(t,y) [y(2); -g/L*sin(y(1))];
 
 [yy_EU,nevals_EU,tt_EU]= euler_esplicito (f, t0, tf, y0, h);
 [tt_RK,yy_RK, nevals_RK] = RKclassico (f, t0, tf, h, y0, Fehlberg4);
-[yy_ERK,nstep, nrech, nevals_ERK, H_r,STIMA,tt_ERK]= RKembedded (f,t0,tf,y0,@Fehlberg_4and5,TOL);
+[yy_ERK,nstep, nrech, nevals_ERK, H_r, H_a,STIMA,tt_ERK]= RKembedded (f,t0,tf,y0,@Fehlberg_4and5,TOL);
 
 % Digramma soluzioni
 figure(1)
