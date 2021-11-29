@@ -1,11 +1,11 @@
-function [yy,nevals, tt]=T_method(fun,jac,t0, tf , y0, h,tol,maxiter,theta,rpar)
+function [yy,nevals, tt]=punto_medio(fun,jac,t0, tf , y0, h,tol,maxiter,rpar)
 
 if (size(y0,2)~=1)
      y0=y0';
 end
 
 nevals=0;
-N = ceil ((tf-t0)/h)+1; 
+N = ceil ((tf-t0)/h)+1;
 tt=zeros(N,1);
 t_aux=t0;
 tt(1)=t0;
@@ -15,8 +15,8 @@ yy(:,1)=y0;
 k = zeros(1,N-1);
 dim= size(y0,1);
 
-G = @(Yk,Yn,h,t_aux) Yk - h*( (1-theta)*fun(t_aux+h,Yk) + theta*fun(t_aux,Yn)) - Yn;
-Gp = @(Yk,h,t_aux) eye(dim) - h*(1-theta)*jac(t_aux,Yk);
+G = @(Yk,Yn,h,t_aux) Yk - h*( fun(t_aux+h/2,Yn+h/2*fun(t_aux,Yn))) - Yn;
+Gp = @(Yk,h,t_aux) eye(dim) - h*jac(t_aux,Yk);
 
 for n=1:N-1
     Yn = yy(:,n);
