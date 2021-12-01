@@ -12,14 +12,14 @@ close all
 %sol_esatta=exp(lambda*t)*(y0 - lambda^2/(lambda^2 + 1)) - (lambda*(sin(t) - lambda*cos(t)))/(lambda^2 + 1)
 
 t0=0;
-tf=0.5;
+tf=10;
 
-y0=2;
-lambda=-2000;
+y0=0;
+lambda=-2;
 
-h=1e-3;
+h=4;
 tol=10e-8;
-maxiter=100;
+maxiter=1000;
 
 fun=@(t,y) lambda*(y-cos(t));
 jac=@(t,y) lambda;
@@ -35,16 +35,16 @@ for d=1
     [tt_rk,yy_rk, nevals] = RKclassico (fun, t0, tf, h, y0, Verner6);
     %Soluzione esatta t,y
     figure()
-    plot(tt_Ei,yy_Ei, "*", tt_Ee,yy_Ee, "*",tt_pm, yy_pm, "*", ...
+    plot(tt_Ei,yy_Ei, "*-", tt_Ee,yy_Ee, "*",tt_pm, yy_pm, "*-", ...
          tt_tr, yy_tr, "*", tt_rke, yy_rke, "*", tt_rk, yy_rk, "*");
-    grid on; hold on; title(['Soluzione a lambda ', num2str(lambda), 'e h ', num2str(h)]); xlabel("t"); ylabel("y");
+    grid on; hold on; title(['Soluzione a lambda ', num2str(lambda), ' e h ', num2str(h)]); xlabel("t"); ylabel("y");
     fplot(sol_esatta, [t0,tf], "y")
     legend("Euler implicito", "Euler esplicito", "Punto medio",  ...
         "trapezi","Rk embedded 2-3","Rk esplicito", "Sol esatta")
 end
 
 % Studiamo l'erroe al variare di h
-hh= 10.^-(2:0.1:3);%[1,0.5,0.25,0.125,0.0625,0.0312,0.0156,0.0078];con lambda=200%10.^-(1:7);
+hh=1./[0.25, 0.5,1,2,4,8,16,32];
 i=1;
 
 for h=hh
@@ -62,8 +62,30 @@ for h=hh
     i=i+1;
 end
 
-%Errore contro h
+% Errore contro h
 figure()
 loglog(hh,err_Ei, "*", hh,err_Ee, "*",hh, err_pm, '*',hh, err_tr, '*',hh, err_rk, '*');
 grid on; hold on; title(['Errore vs h. A lambda= ', num2str(lambda) ]); xlabel("h"); ylabel("err");
 legend("Euler implicito", "Euler esplicito", "Punto medio","trapezi", "rk V6")
+
+% Punto c
+i=1;
+y0=0;
+lambda=-2;
+hh_c=1./[0.25, 0.5,1,2,4,8,16,32];
+sol_esatta=@(t) exp(lambda*t)*(y0 - lambda^2/(lambda^2 + 1)) - (lambda*(sin(t) - lambda*cos(t)))/(lambda^2 + 1);
+fun=@(t,y) lambda*(y-cos(t));
+jac=@(t,y) lambda;
+for h=hh_c
+    [yy_Ei,nevals_Ei, tt_Ei]=T_method(fun,jac,t0, tf , y0, h,tol,maxiter,0);
+    err_Ei_c(i)= norm(yy_Ei'-sol_esatta(tt_Ei),"inf");
+    [yy_pm,nevals_tr, tt_pm]=punto_medio(fun,jac,t0, tf , y0, h,tol,maxiter);
+    err_pm_c(i)= norm(yy_pm'-sol_esatta(tt_pm),"inf");
+    [tt_rk,yy_rk, nevals] = RKclassico (fun, t0, tf, h, y0, Verner6);
+    err_rk(i)= norm(yy_rk'-sol_esatta(tt_rk),"inf");
+    i=i+1;
+end
+figure()
+loglog(hh_c,err_Ei_c, "*", hh_c, err_pm_c, '*', hh_c,err_rk, "*");
+grid on; hold on; title(['Errore vs h. A lambda= ', num2str(lambda) ]); xlabel("h"); ylabel("err");
+legend("Euler implicito", "Punto medio", "rk ordine 6")
