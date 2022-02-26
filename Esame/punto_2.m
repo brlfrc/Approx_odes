@@ -26,13 +26,16 @@ for a=1:length(q)
 end
 
 t0=1;
-tf=1.01;
+tf=2;
 h=0.0001;
 fun=@(t,z) system_force(z);
-
+fun1=@(t,z) system_force_modified(z);
+tic
 [yy,nevals,tt] = Storme_Verlet(fun, t0, tf, z0, h);
-[tt, yy,nevals_rk]= RKclassico (fun, t0, tf, h, z0, Verner6);
-yy=yy';
+toc
+tic
+[yy,nevals,tt] = Storme_Verlet(fun1, t0, tf, z0, h);
+toc
 for a=1:length(tt)
     K_media(a)=0;
     for i=N_molecole*2+1:2:N_molecole*4
