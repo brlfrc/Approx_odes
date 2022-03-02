@@ -1,4 +1,4 @@
-function [yy,nevals, tt] = Storme_Verlet (fun, t0, tf, y0, h)
+function [yy,nevals, tt] = Storme_Verlet_vero (fun, t0, tf, y0, h)
 % Storme_Verlet Implementazione One-step formulation del metodo Stoerme
 % Verlet. Applicata al caso molecole
 %   fun: funzione che descrive la dinamica (q'=p, p'=F)
@@ -27,7 +27,7 @@ for j=1:N
     
     yy(j+1,:)=0;
     a=fun(t_aux,yy(j,:));
-    v= yy(j,N_part+1:e  nd)+(0.5*h*a(N_part+1:end))';
+    v= yy(j,N_part+1:end)+(0.5*h*a(N_part+1:end))';
     yy(j+1,1:N_part)= yy(j,1:N_part)+h*v;
     a=fun(t_aux,yy(j+1,:));
     yy(j+1,N_part+1:end)= v+(h/2*a(N_part+1:end))';

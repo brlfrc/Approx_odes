@@ -31,10 +31,10 @@ h=0.001;
 
 fun=@(t,z) system_force(z);
 
-[yy,nevals,tt]= euler_esplicito (fun, t0, tf, z0, h);
+% [yy,nevals,tt]= euler_esplicito (fun, t0, tf, z0, h);
 % [yy1,nstep,nrej,cost,Hr,Ha,STIMA,tt1]= RKembedded (fun,t0,tf,z0,@RK_2and3,TOL);
 [tt1, yy1,nevals_rk]= RKclassico (fun, t0, tf, h, z0, Verner6);
-
+% [yy1,nevals, tt1] =Storme_Verlet (fun, t0, tf, z0, h);
 % plot(yy(:,1),yy(:,2),"*",yy(:,3),yy(:,4),"*",yy(:,5),yy(:,6),"*")
 hold on
 grid on

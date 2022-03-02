@@ -1,38 +1,23 @@
 clear all
 close all
 
-% molecola: m*q''=F
-% p'=F
-% q' = p'
-
 N_molecole=100;
-% q=rand(2,N_molecole);
 for i=0:9
     q(:,(i+1)+9*i:(i+1)+9*i+9)=[i+zeros(1,10);
         0:9];
 end
 
-% p=10*rand(2,N_molecole);
 p=zeros(2,N_molecole);
-
-i=1;
-for a=1:length(q)
-    z0(i:i+1,1)=q(:,a);
-    i=i+2;
-end
-for a=1:length(q)
-    z0(i:i+1,1)=p(:,a);
-    i=i+2;
-end
+z0= convert(q,p);
 
 t0=1;
 tf=2;
-h=0.0001;
+
+h=[0.1,0.01, 0.001, 0.0001,0.00001,0.000001];
 fun=@(t,z) system_force(z);
-fun1=@(t,z) system_force_modified(z);
-tic
+
 [yy1,nevals,tt] = Storme_Verlet(fun, t0, tf, z0, h);
-toc
+
 tic
 [yy,nevals,tt] = Storme_Verlet(fun1, t0, tf, z0, h);
 toc
@@ -97,4 +82,16 @@ figure
 for i=1:2:N_molecole*2
     hold on
     plot(yy1(:,i),yy1(:,i+1),"*");
+end
+
+function z0= convert(q,p)
+    i=1;
+    for a=1:length(q)
+        z0(i:i+1,1)=q(:,a);
+        i=i+2;
+    end
+    for a=1:length(q)
+        z0(i:i+1,1)=p(:,a);
+        i=i+2;
+    end
 end

@@ -1,7 +1,7 @@
 clear all
 close all
 
-N_molecole=4;
+N_molecole=3;
 q=zeros (2,N_molecole);
 p=zeros (2,N_molecole);
 q(:,1)=[-0.5,0];
@@ -10,8 +10,8 @@ q(:,2)=[1,1];
 p(:,2)=[0,0];
 q(:,3)=[-1,1.3];
 p(:,3)=[0,0];
-q(:,4)=[+1,-1.3];
-p(:,4)=[0,0];
+% q(:,4)=[+1,-1.3];
+% p(:,4)=[0,0];
 
 % N_molecole=5;
 % q=3*rand(2,N_molecole)-1.5;
@@ -29,10 +29,12 @@ for a=1:length(q)
 end
 
 t0=0;
-tf=8;
-h=0.0001;
+tf=50;
+h=0.01;
+x_box=3;
+y_box=3;
 
-fun=@(t,z) system_force_box (z,3,3);
+fun=@(t,z) system_force_box (z,x_box,y_box);
 
 [yy,nevals,tt]= euler_esplicito (fun, t0, tf, z0, h);
 figure()
@@ -60,7 +62,7 @@ for a=1:length(tt)
         q_tt(1,b)=yy(a,i);
         q_tt(2,b)=yy(a,i+1);
     end
-    U(a)=U_potenziale(q_tt);
+    U(a)=U_potenziale_box(q_tt,x_box,y_box);
 end
 figure()
 
@@ -90,7 +92,7 @@ for i=1:2:N_molecole*2
     plot(yy(:,i),yy(:,i+1),"*");
 end
 legend();
-quiver(yy(:,3),yy(:,4),yy(:,11),yy(:,12))
+% quiver(yy(:,3),yy(:,4),yy(:,11),yy(:,12))
 for a=1:length(tt)
     K_media(a)=0;
     for i=N_molecole*2+1:2:N_molecole*4
@@ -105,7 +107,7 @@ for a=1:length(tt)
         q_tt(1,b)=yy(a,i);
         q_tt(2,b)=yy(a,i+1);
     end
-    U(a)=U_potenziale(q_tt);
+    U(a)=U_potenziale_box(q_tt,x_box,y_box);
 end
 figure()
 
