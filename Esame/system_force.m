@@ -1,4 +1,4 @@
-function [f] = system_force(z)
+function [f,count] = system_force(z)
     
     if(size(z,2)~=1)
         z=z';
@@ -21,7 +21,7 @@ function [f] = system_force(z)
         i=i+2;
     end
     for a=1:length(q)
-        f(i:i+1,1)=forza(q,a);
+        [f(i:i+1,1),count]=forza(q,a);
         i=i+2;
     end
 end

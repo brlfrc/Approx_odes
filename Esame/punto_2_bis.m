@@ -13,10 +13,12 @@ z0= convert(q,p);
 t0=1;
 tf=2;
 
-h=[0.1,0.01, 0.001, 0.0001,0.00001];
+h=[0.01,0.005, 0.001,0.0005, 0.0001];
 fun=@(t,z) system_force(z);
+fun1=@(t,z) system_force_modified(z);
 
 for j=1:length(h)
+    j
     [yy,nevals,tt] = Storme_Verlet(fun, t0, tf, z0, h(j));
     
     for a=1:length(tt)
@@ -40,7 +42,10 @@ for j=1:length(h)
 end
 
 figure
-semilogy(h,diff, "*")
+loglog(h,diff, "*")
+xlabel("h")
+ylabel("E_M")
+grid on
 
 function z0= convert(q,p)
     i=1;

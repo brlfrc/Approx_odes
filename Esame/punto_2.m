@@ -15,19 +15,10 @@ end
 % p=10*rand(2,N_molecole);
 p=zeros(2,N_molecole);
 
-i=1;
-for a=1:length(q)
-    z0(i:i+1,1)=q(:,a);
-    i=i+2;
-end
-for a=1:length(q)
-    z0(i:i+1,1)=p(:,a);
-    i=i+2;
-end
-
-t0=1;
-tf=2;
-h=0.0001;
+z0=convert(q,p);
+t0=0;
+tf=5;
+h=0.001;
 fun=@(t,z) system_force(z);
 fun1=@(t,z) system_force_modified(z);
 tic
@@ -58,15 +49,31 @@ figure
 plot(tt,K_media,"*")
 hold on
 plot(tt,U,"*")
+grid on
+xlabel("t")
+ylabel("E")
+legend("Cinematica", "Potenziale")
 
 figure
 semilogy(tt,abs(K_media+U-K_media(1)-U(1)), "*")
+grid on
+xlabel("t")
+ylabel("\DeltaE(t)")
 
 figure
 for i=1:2:N_molecole*2
     hold on
     plot(yy(:,i),yy(:,i+1),"*");
 end
+xlabel("x")
+ylabel("y")
+grid on
+
+figure
+plot(tt,abs((K_media+U)-U(1))/abs(U(1)), "*")
+grid on
+xlabel("t")
+ylabel("\DeltaE_%(t)")
 
 for a=1:length(tt)
     K_media(a)=0;
@@ -97,4 +104,17 @@ figure
 for i=1:2:N_molecole*2
     hold on
     plot(yy1(:,i),yy1(:,i+1),"*");
+end
+
+
+function z0= convert(q,p)
+    i=1;
+    for a=1:length(q)
+        z0(i:i+1,1)=q(:,a);
+        i=i+2;
+    end
+    for a=1:length(q)
+        z0(i:i+1,1)=p(:,a);
+        i=i+2;
+    end
 end

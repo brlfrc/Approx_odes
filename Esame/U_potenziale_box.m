@@ -1,4 +1,4 @@
-function [U] = U_potenziale_box(q,x_box,y_box)
+function [U] = U_potenziale_box(q,x_box,y_box,U0)
 %   U_potenziale Data configurazione calcola il potenziale totale di lennard jones
 %   (caso 2d)
 %   
@@ -14,10 +14,10 @@ end
 
 for a=1:length(q)
     if abs(q(1,a))> x_box/2
-       U=U+10*(q(1,a)-x_box/2)*(x_box/2+q(1,a));
+       U=U+U0*(q(1,a)-x_box/2)*(x_box/2+q(1,a));
     end
     if abs(q(2,a))> y_box/2
-       U=U+10*(q(2,a)-y_box/2)*(y_box/2+q(2,a));
+       U=U+U0*(q(2,a)-y_box/2)*(y_box/2+q(2,a));
     end
 end
 
